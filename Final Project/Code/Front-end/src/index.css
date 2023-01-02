@@ -1,0 +1,64 @@
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: linear-gradient(135deg, #8bc6ec 0%, #9599e2 100%);
+  background-repeat: no-repeat;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-layout {
+  margin: auto;
+  width: 35%;
+}
+
+.form-control {
+  padding: 15px;
+}
+
+.auth-link {
+  text-decoration: none;
+  color: rgb(56, 90, 119);
+}
+
+.btn-primary {
+  background-color: #3b5998;
+  border-width: 0px;
+  width: 100%;
+  color: #fff;
+  margin-bottom: 15px;
+  padding: 15px;
+}
+
+.btn-primary:hover {
+  background-color: #8b9dc3;
+  color: #fff;
+}
+
+@media only screen and (max-width: 768px) {
+  .form-layout {
+    width: 100%;
+  }
+}
+
+.nav-item {
+  margin-left: 20px;
+  margin-right: 20px;
+}

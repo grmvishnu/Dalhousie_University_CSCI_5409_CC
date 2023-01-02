@@ -1,0 +1,97 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "Lambda Invoke",
+  "States": {
+    "Lambda Invoke": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:us-east-1:301735857594:function:TierDecider:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Tier 1?"
+    },
+    "Tier 1?": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.value",
+          "StringMatches": "Tier1",
+          "Next": "T1"
+        }
+      ],
+      "Default": "Tier 2?"
+    },
+    "T1": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sqs:sendMessage",
+      "Parameters": {
+        "MessageBody.$": "$",
+        "QueueUrl": "https://sqs.us-east-1.amazonaws.com/301735857594/T1"
+      },
+      "End": true
+    },
+    "Tier 2?": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.value",
+          "StringMatches": "Tier2",
+          "Next": "T2"
+        }
+      ],
+      "Default": "Tier 3?"
+    },
+    "T2": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sqs:sendMessage",
+      "Parameters": {
+        "MessageBody.$": "$",
+        "QueueUrl": "https://sqs.us-east-1.amazonaws.com/301735857594/T2"
+      },
+      "End": true
+    },
+    "Tier 3?": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.value",
+          "StringMatches": "Tier3",
+          "Next": "T3"
+        }
+      ],
+      "Default": "Unknown"
+    },
+    "T3": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sqs:sendMessage",
+      "Parameters": {
+        "MessageBody.$": "$",
+        "QueueUrl": "https://sqs.us-east-1.amazonaws.com/301735857594/T3"
+      },
+      "End": true
+    },
+    "Unknown": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sqs:sendMessage",
+      "Parameters": {
+        "MessageBody.$": "$",
+        "QueueUrl": "https://sqs.us-east-1.amazonaws.com/301735857594/Unknown"
+      },
+      "End": true
+    }
+  }
+}
